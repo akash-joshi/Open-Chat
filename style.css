@@ -1,0 +1,80 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+ul {}
+
+body {
+  font: 16px Helvetica, Arial;
+  height: 100%;
+}
+
+#sendform {
+  background: #000;
+  padding: 3px;
+  position: fixed;
+  bottom: 0;
+  width: 80%;
+}
+
+#sendform input {
+  border: 0;
+  padding: 10px;
+  width: 90%;
+  margin-right: .5%;
+}
+
+#sendform button {
+  width: 9%;
+  background: rgb(130, 224, 255);
+  border: none;
+  padding: 10px 10px 10px 0px;
+}
+
+#messages {
+  list-style-type: none;
+  height: 95%;
+  overflow: scroll; //width: 80%;
+  flex: 4;
+}
+
+#messages li {
+  padding: 5px 10px;
+  padding-left: 30px
+}
+
+#messages li:nth-child(odd) {
+  background: #eee;
+}
+
+#online {
+  margin-left: auto;
+  flex: 1;
+  list-style: none;
+}
+
+#online li{
+  margin-left: 25px;
+}
+
+#innermsg {
+  padding-left: 20px;
+}
+
+#login {
+  text-align: center;
+  vertical-align: middle;
+  line-height: 150px;
+}
+
+#update {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.mainwrapper {
+  display: flex;
+  flex-direction: row;
+}
