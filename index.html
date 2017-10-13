@@ -12,7 +12,7 @@
     Enter username :
     <input autocomplete="on" id="user" required /><input id="usersubmit" type=submit button>
   </form>
-  <span class="mainwrapper">
+  <span class="mainwrapper" >
     <ul id="messages"></ul>
     <ul id="online"></ul>
     <div id="sendform">
@@ -30,7 +30,7 @@
       var socket = io();
       var ready = false;
       console.log(0);
-      $("#sendform").hide();
+      //$("#sendform").hide();
       $('#login').show();
       $("#login").submit(function(event) {
         event.preventDefault();
@@ -40,7 +40,7 @@
         if ($('#user').val().replace(/\s/g, ''))
           var nick = $('#user').val();
         socket.emit("join", nick);
-        $("#sendform").show();
+        $(".mainwrapper").css('display','flex');
         $('#login').hide();
       });
 
@@ -57,6 +57,7 @@
       });
 
       socket.on("people-list", function(people) {
+        $('#online').empty();
         var x;
         for (x in people) {
           $('#online').append('<li>' + people[x]);

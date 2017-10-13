@@ -75,6 +75,6 @@ body {
 }
 
 .mainwrapper {
-  display: flex;
+  display: none;
   flex-direction: row;
 }
