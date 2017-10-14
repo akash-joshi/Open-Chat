@@ -7,6 +7,7 @@ var session = require("express-session")({
     saveUninitialized: true
   });
 var people = {};
+var stringHash = require('string-hash');
 
 // Attach session
 app.use(session);
@@ -20,24 +21,30 @@ app.get('/style.css', function(req,res){
 });
 
 io.on('connection', function(socket){
-	socket.on("join", function(nick){
+	socket.on("join", (nick) => {
 		console.log(" " + people[socket.id]+" connected");
-		people[socket.id] = nick;
+		people[socket.id] = {
+			nick : nick,
+			id : stringHash(nick)
+		};
 		console.log(people);
 		socket.emit("update", "You have connected to server.");
 		socket.emit("people-list", people);
+		socket.broadcast.emit("add-person",nick);
 		socket.broadcast.emit("update", nick + " has joined the server. ");
 	});
 
-	socket.on('chat message', function(msg){
+	socket.on('chat message', (msg) => {
 		io.emit('chat message', people[socket.id],msg);
-		console.log(people[socket.id]+': message: '+msg);
 	});
-	socket.on('disconnect', function(){
-	socket.broadcast.emit("update", people[socket.id] + " has disconnected. ");
-		console.log(people[socket.id]+' disconnected');
-		delete people[socket.id];
-		socket.emit("people-list",people);
+
+	socket.on('disconnect', () => {
+		if(people[socket.id]){
+			socket.broadcast.emit("update", people[socket.id].nick + " has disconnected. ");
+			socket.broadcast.emit("remove-person",people[socket.id].id);
+			console.log("Remove : "+people[socket.id].id);
+			delete people[socket.id];	
+		}	
 	});
 });
 

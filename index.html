@@ -29,7 +29,6 @@
       var prev;
       var socket = io();
       var ready = false;
-      console.log(0);
       //$("#sendform").hide();
       $('#login').show();
       $("#login").submit(function(event) {
@@ -52,23 +51,31 @@
         return false;
       });
 
-      socket.on("update", function(msg) {
+      socket.on("add-person", (nick) => {
+        $('#online').append('<li>'+nick);
+      })
+
+      socket.on("remove-person", (nick) => {
+        console.log(nick);
+        $('#'+nick).remove();
+      });
+
+      socket.on("update", (msg) => {
         $('#messages').append('<li id="update" >' + msg);
       });
 
-      socket.on("people-list", function(people) {
-        $('#online').empty();
+      socket.on("people-list", (people) => {
         var x;
         for (x in people) {
-          $('#online').append('<li>' + people[x]);
+          $('#online').append('<li id="' + people[x].id + '">' + people[x].nick);
         }
       });
 
-      socket.on("disconnect", function() {
+      socket.on("disconnect", () => {
         $('#messages').append("<li id=\"update\">You have lost connection to server. Refresh Page to restore connection.");
         $('#sendform').hide();
       });
-      socket.on('chat message', function(nick, msg) {
+      socket.on('chat message', (nick, msg) => {
         if (prev == nick) {
           $('#messages li:last-child > div').append("<div>" + msg + "</div>");
         } else {
