@@ -20,7 +20,9 @@ app.get('/style.css', (req,res) => {
 	res.sendFile(__dirname+"/style.css");
 });
 
-app.get('/main.js')
+app.get('/main.js', (req,res) => {
+	res.sendFile(__dirname+"/main.js");
+});
 
 io.on('connection', function(socket){
 	socket.on("join", (nick) => {
