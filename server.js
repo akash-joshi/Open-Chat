@@ -12,13 +12,15 @@ var stringHash = require('string-hash');
 // Attach session
 app.use(session);
 
-app.get('/', function(req,res){
+app.get('/', (req,res) => {
 	res.sendFile(__dirname+"/index.html");
 });
 
-app.get('/style.css', function(req,res){
+app.get('/style.css', (req,res) => {
 	res.sendFile(__dirname+"/style.css");
 });
+
+app.get('/main.js')
 
 io.on('connection', function(socket){
 	socket.on("join", (nick) => {
