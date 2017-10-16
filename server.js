@@ -45,7 +45,7 @@ io.on('connection', function(socket){
 	socket.on('disconnect', () => {
 		if(people[socket.id]){
 			socket.broadcast.emit("update", people[socket.id].nick + " has disconnected. ");
-			socket.broadcast.emit("remove-person",people[socket.id].id);
+			io.emit("remove-person",people[socket.id].id);
 			console.log("Remove : "+people[socket.id].id);
 			delete people[socket.id];	
 		}	
