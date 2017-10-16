@@ -39,7 +39,7 @@ io.on('connection', function(socket){
 	});
 
 	socket.on('chat message', (msg) => {
-		io.emit('chat message', people[socket.id],msg);
+		io.emit('chat message', people[socket.id].nick,msg);
 	});
 
 	socket.on('disconnect', () => {
