@@ -1,33 +1,38 @@
-$(function() {
+$(() => {
     
           var prev;
           var socket = io();
           var ready = false;
-          //$("#sendform").hide();
+
           $('#login').show();
-          $("#login").submit(function(event) {
+          $("#login").submit((event) => {
             event.preventDefault();
           });
     
-          $('#usersubmit').click(function() {
+          $('#usersubmit').click(() => {
             if ($('#user').val().replace(/\s/g, ''))
               var nick = $('#user').val();
             socket.emit("join", nick);
+            ready = true;
+            console.log(ready)
             $(".mainwrapper").css('display','flex');
             $('#login').hide();
           });
     
-          $("#sendform").submit(function() {
+          $("#sendform").submit( () => {
             if ($('#m').val() == '')
               return false;
             socket.emit('chat message', $('#m').val());
             $('#m').val('');
             return false;
           });
-    
-          socket.on("add-person", (nick) => {
-            $('#online').append('<li>'+nick);
-          })
+          
+          if(ready){
+            socket.on("add-person", (nick) => {
+                $('#online').append('<li>'+nick);
+              })
+          }
+          
     
           socket.on("remove-person", (nick) => {
             console.log(nick);
