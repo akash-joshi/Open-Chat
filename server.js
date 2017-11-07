@@ -16,16 +16,17 @@ app.get('/', (req,res) => {
 	res.sendFile(__dirname+"/index.html");
 });
 
-app.get('/style.css', (req,res) => {
-	res.sendFile(__dirname+"/style.css");
+app.get('/css/:fileName', (req, res) => {
+	res.sendFile(__dirname+'/css/'+req.params.fileName);
 });
 
 app.get('/main.js', (req,res) => {
 	res.sendFile(__dirname+"/main.js");
 });
 
-io.on('connection', function(socket){
-	socket.on("join", (nick) => {
+io.on('connection', (socket) => { 
+	socket.on("join", (nick,room) => {
+		socket.join(room);
 		console.log(" " + people[socket.id]+" connected");
 		people[socket.id] = {
 			nick : nick,
@@ -34,12 +35,12 @@ io.on('connection', function(socket){
 		console.log(people);
 		socket.emit("update", "You have connected to server.");
 		socket.emit("people-list", people);
-		socket.broadcast.emit("add-person",nick);
-		socket.broadcast.emit("update", nick + " has joined the server. ");
+		socket.to(room).broadcast.emit("add-person",nick);
+		socket.to(room).broadcast.emit("update", nick + " has joined the server. ");
 	});
 
-	socket.on('chat message', (msg) => {
-		io.emit('chat message', people[socket.id].nick,msg);
+	socket.on('chat message', (msg,room) => {
+		io.to(room).emit('chat message', people[socket.id].nick,msg);
 	});
 
 	socket.on('disconnect', () => {
@@ -54,6 +55,6 @@ io.on('connection', function(socket){
 
 var port = process.env.PORT || 8080;
 
-http.listen(port, function () {
+http.listen(port, () => {
 	console.log("working on port "+port);
 });
