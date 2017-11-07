@@ -4,7 +4,12 @@
   box-sizing: border-box;
 }
 
-ul {}
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
 
 body {
   font: 16px Helvetica, Arial;
@@ -12,31 +17,33 @@ body {
 }
 
 #sendform {
-  background: #000;
-  padding: 3px;
+  padding: 1px;
   position: fixed;
   bottom: 0;
   width: 80%;
 }
 
 #sendform input {
-  border: 0;
+  border: solid;
   padding: 10px;
-  width: 90%;
-  margin-right: .5%;
+  width: 95%;
+  border-radius: 20px;
+  margin-right: .25%;
+  border-width: 1px;
 }
 
 #sendform button {
-  width: 9%;
+  width: 4%;
   background: rgb(130, 224, 255);
   border: none;
-  padding: 10px 10px 10px 0px;
+  padding: 10px 0px 10px 0px;
+  border-radius: 20px;
 }
 
 #messages {
   list-style-type: none;
   height: 95%;
-  overflow: scroll; //width: 80%;
+  overflow: scroll; 
   flex: 4;
 }
 

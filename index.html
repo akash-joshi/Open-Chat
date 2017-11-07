@@ -3,14 +3,19 @@
 
 <head>
   <title>Socket.IO chat</title>
-  <link href="style.css" rel="stylesheet" />
+  <link href="css/style.css" rel="stylesheet" />
+<!--link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css"-->
 </head>
 
 <body>
 
   <form id="login" action="">
     Enter username :
-    <input autocomplete="on" id="user" required /><input id="usersubmit" type=submit button>
+    <input autocomplete="on" id="user" required />
+    Enter room :  (leave empty for default)
+    <input autocomplete="on" id="room" required />
+    <input id="usersubmit" type=submit class="button" value="Submit">
   </form>
   <span class="mainwrapper" >
     <ul id="messages"></ul>
