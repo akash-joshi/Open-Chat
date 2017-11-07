@@ -1,13 +1,13 @@
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var session = require("express-session")({
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const session = require("express-session")({
     secret: "my-secret",
     resave: true,
     saveUninitialized: true
   });
-var people = {};
-var stringHash = require('string-hash');
+const people = {};
+const stringHash = require('string-hash');
 
 // Attach session
 app.use(session);
@@ -28,14 +28,16 @@ io.on('connection', (socket) => {
 	socket.on("join", (nick,room) => {
 		socket.join(room);
 		console.log(" " + people[socket.id]+" connected");
+		const id=stringHash(nick);
 		people[socket.id] = {
 			nick : nick,
-			id : stringHash(nick)
+			id : id,
+			room : room
 		};
 		console.log(people);
 		socket.emit("update", "You have connected to server.");
 		socket.emit("people-list", people);
-		socket.to(room).broadcast.emit("add-person",nick);
+		socket.to(room).broadcast.emit("add-person",nick,id);
 		socket.to(room).broadcast.emit("update", nick + " has joined the server. ");
 	});
 

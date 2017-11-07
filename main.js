@@ -2,9 +2,10 @@
 $(() => {
 
   let prev;
-  let socket = io();
   let ready = false;
   let room;
+  const cleanInput = input => $('<div/>').text(input).html();
+  const socket = io();
 
   $('#login').show();
   $("#login").submit((event) => {
@@ -12,7 +13,7 @@ $(() => {
   });
 
   $('#usersubmit').click(() => {
-    let nick = cleanInput($('#user').val().trim());  
+    const nick = cleanInput($('#user').val().trim());  
     room = $('#room').val()
     if(nick){
       socket.emit("join", nick,room);
@@ -23,7 +24,7 @@ $(() => {
   });
 
   $("#sendform").submit( () => {
-    let message = cleanInput($('#m').val());
+    const message = cleanInput($('#m').val());
     
     if(message){
       socket.emit('chat message', $('#m').val(),room);
@@ -34,9 +35,10 @@ $(() => {
   });
   
 
-  socket.on("add-person", (nick) => {
+  socket.on("add-person", (nick,id) => {
+    console.log(nick)
     if(ready){
-      $('#online').append('<li>'+nick);
+      $('#online').append('<li id="' + id + '">' + nick);
     }
       
     })  
@@ -51,9 +53,12 @@ $(() => {
   })
 
   socket.on("people-list", (people) => {
+
     let x;
     for (x in people) {
-      $('#online').append('<li id="' + people[x].id + '">' + people[x].nick);
+      if(people[x].room == room){
+        $('#online').append('<li id="' + people[x].id + '">' + people[x].nick);
+      }
     }
   });
 
@@ -73,9 +78,4 @@ $(() => {
       scrollTop: $('#messages').prop("scrollHeight")
     }, 100);
   });
-
-  function cleanInput (input) {
-    return $('<div/>').text(input).html();
-  }
-
 });
