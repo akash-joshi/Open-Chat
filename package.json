@@ -11,6 +11,6 @@
     "micro" : "latest"
   }, 
   "scripts": { 
-    "start": "supervisor -e html,js,css server.js" 
+    "start-dev": "supervisor -e html,js,css server.js" 
   } 
 }
