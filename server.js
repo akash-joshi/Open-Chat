@@ -35,7 +35,7 @@ io.on('connection', (socket) => {
 			room : room
 		};
 		console.log(people);
-		socket.emit("update", "You have connected to server.");
+		socket.emit("update", "You have connected to room "+room);
 		socket.emit("people-list", people);
 		socket.to(room).broadcast.emit("add-person",nick,id);
 		socket.to(room).broadcast.emit("update", nick + " has joined the server. ");
