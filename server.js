@@ -7,7 +7,8 @@ const session = require("express-session")({
     saveUninitialized: true
   });
 const people = {};
-const stringHash = require('string-hash');
+const sockmap = {};
+//const stringHash = require('string-hash');
 
 // Attach session
 app.use(session);
@@ -27,30 +28,38 @@ app.get('/main.js', (req,res) => {
 io.on('connection', (socket) => { 
 	socket.on("join", (nick,room) => {
 		socket.join(room);
-		console.log(" " + people[socket.id]+" connected");
-		const id=stringHash(nick);
-		people[socket.id] = {
+		//const id=stringHash(nick);
+		if(!people.hasOwnProperty(room)){
+			people[room]={};
+		}
+		
+		people[room][socket.id] = {
 			nick : nick,
-			id : id,
-			room : room
+			id : socket.id
 		};
+		sockmap[socket.id] = {
+			nick : nick,
+			room : room
+		}
+		console.log("After join : ");
 		console.log(people);
 		socket.emit("update", "You have connected to room "+room);
-		socket.emit("people-list", people);
-		socket.to(room).broadcast.emit("add-person",nick,id);
+		socket.emit("people-list", people[room]);
+		socket.to(room).broadcast.emit("add-person",nick,socket.id);
 		socket.to(room).broadcast.emit("update", nick + " has joined the server. ");
 	});
 
 	socket.on('chat message', (msg,room) => {
-		io.to(room).emit('chat message', people[socket.id].nick,msg);
+		io.to(room).emit('chat message', people[room][socket.id].nick,msg);
 	});
 
 	socket.on('disconnect', () => {
-		if(people[socket.id]){
-			socket.broadcast.emit("update", people[socket.id].nick + " has disconnected. ");
-			io.emit("remove-person",people[socket.id].id);
-			console.log("Remove : "+people[socket.id].id);
-			delete people[socket.id];	
+		if(sockmap[socket.id]){
+			const room=sockmap[socket.id].room;
+			socket.broadcast.emit("update", sockmap[socket.id].nick + " has disconnected. ");
+			io.emit("remove-person",socket.id);
+			delete people[room][socket.id];
+			delete sockmap[socket.id];	
 		}	
 	});
 });

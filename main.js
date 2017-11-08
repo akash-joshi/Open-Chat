@@ -53,12 +53,9 @@ $(() => {
   })
 
   socket.on("people-list", (people) => {
-
     let x;
     for (x in people) {
-      if(people[x].room == room){
         $('#online').append('<li id="' + people[x].id + '">' + people[x].nick);
-      }
     }
   });
 
