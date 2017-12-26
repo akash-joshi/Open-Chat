@@ -73,7 +73,8 @@ body {
 #login {
   text-align: center;
   vertical-align: middle;
-  line-height: 150px;
+  margin-top: 150px;
+  line-height: 3em;
 }
 
 #update {
