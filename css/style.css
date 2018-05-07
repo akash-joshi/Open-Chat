@@ -33,7 +33,7 @@ body {
 }
 
 #sendform button {
-  width: 4%;
+  width: 75px;
   background: rgb(130, 224, 255);
   border: none;
   padding: 10px 0px 10px 0px;
