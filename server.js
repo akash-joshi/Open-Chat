@@ -43,7 +43,10 @@ io.on('connection', (socket) => {
 		}
 		console.log("After join : ");
 		console.log(people);
-		socket.emit("update", "You have connected to room "+room);
+		if(room=='')
+			socket.emit("update", "You have connected to the default room <br/> Refresh to switch room/username");
+		else	
+		socket.emit("update", "You have connected to room "+room+`<br/> Refresh to switch room/username`);
 		socket.emit("people-list", people[room]);
 		socket.to(room).broadcast.emit("add-person",nick,socket.id);
 		socket.to(room).broadcast.emit("update", nick + " has joined the server. ");

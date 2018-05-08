@@ -60,9 +60,12 @@ $(() => {
   });
 
   socket.on("disconnect", () => {
-    $('#messages').append("<li id=\"update\">You have lost connection to server. Refresh Page to restore connection.");
+    $('#messages').append("<li id=\"update\">You have lost connection to server, check your internet or try to refresh the page");
     $('#sendform').hide();
   });
+  socket.on("reconnect", ()=>{
+    location.reload()
+  })
   socket.on('chat message', (nick, msg) => {
     if (prev == nick) {
       $('#messages li:last-child > div').append("<div>" + msg + "</div>");
