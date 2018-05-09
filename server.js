@@ -8,6 +8,7 @@ const session = require("express-session")({
   });
 const people = {};
 const sockmap = {};
+const messageque = {};
 //const stringHash = require('string-hash');
 
 // Attach session
@@ -43,17 +44,32 @@ io.on('connection', (socket) => {
 		}
 		console.log("After join : ");
 		console.log(people);
+		if(messageque.hasOwnProperty(room)){
+			for(i=0;i<messageque[room].length;i++){
+				io.to(room).emit('message que', messageque[room][i].nick,messageque[room][i].msg);
+			}
+		}
 		if(room=='')
 			socket.emit("update", "You have connected to the default room <br/> Refresh to switch room/username");
 		else	
 		socket.emit("update", "You have connected to room "+room+`<br/> Refresh to switch room/username`);
 		socket.emit("people-list", people[room]);
 		socket.to(room).broadcast.emit("add-person",nick,socket.id);
-		socket.to(room).broadcast.emit("update", nick + " has joined the server. ");
+		socket.to(room).broadcast.emit("update", nick + " has come online. ");
 	});
 
 	socket.on('chat message', (msg,room) => {
 		io.to(room).emit('chat message', people[room][socket.id].nick,msg);
+		if(!messageque.hasOwnProperty(room)){
+			messageque[room]=[]
+		}
+		messageque[room].push({
+			nick : people[room][socket.id].nick,
+			msg : msg
+		})
+		if(messageque[room].length>50)
+			messageque[room].shift()
+		console.log(messageque)	
 	});
 
 	socket.on('disconnect', () => {

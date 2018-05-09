@@ -50,6 +50,7 @@ $(() => {
 
   socket.on("update", (msg) => {
     $('#messages').append('<li id="update" >' + msg);
+    prev='';
   })
 
   socket.on("people-list", (people) => {
@@ -77,5 +78,15 @@ $(() => {
     $("#messages").animate({
       scrollTop: $('#messages').prop("scrollHeight")
     }, 100);
+  });
+
+  socket.on('message que', (nick, msg) => {
+    if (prev == nick) {
+      $('#messages li:last-child > div').append("<div>" + msg + "</div>");
+    } else {
+      $('#messages').append("<li> <strong>" + nick + "</strong> : " + "<div id=\"innermsg\">" + msg + "</div></li>");
+    }
+
+    prev = nick;
   });
 });
