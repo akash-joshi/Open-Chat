@@ -69,7 +69,6 @@ io.on('connection', (socket) => {
 		})
 		if(messageque[room].length>50)
 			messageque[room].shift()
-		console.log(messageque)	
 	});
 
 	socket.on('disconnect', () => {
