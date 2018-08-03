@@ -1,6 +1,6 @@
 {
   "name": "socket-chat-example",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "description": "new app",
   "dependencies": {
     "express": "^4.15.3",
