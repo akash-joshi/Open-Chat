@@ -6,6 +6,8 @@ const session = require("express-session")({
     resave: true,
     saveUninitialized: true
   });
+const favicon = require('serve-favicon')
+  
 const people = {};
 const sockmap = {};
 const messageque = {};
@@ -13,8 +15,17 @@ const messageque = {};
 
 // Attach session
 app.use(session);
+app.use(favicon(__dirname+'/favicon.ico'))
 
 app.get('/', (req,res) => {
+	res.sendFile(__dirname+"/index.html");
+});
+
+app.get('/sw.js', (req,res) => {
+	res.sendFile(__dirname+"/sw.js");
+});
+
+app.get('/index.html', (req,res) => {
 	res.sendFile(__dirname+"/index.html");
 });
 
@@ -22,9 +33,17 @@ app.get('/css/:fileName', (req, res) => {
 	res.sendFile(__dirname+'/css/'+req.params.fileName);
 });
 
-app.get('/main.js', (req,res) => {
-	res.sendFile(__dirname+"/main.js");
+app.get('/js/:fileName', (req, res) => {
+	res.sendFile(__dirname+'/js/'+req.params.fileName);
 });
+
+app.get('/manifest.json', (req,res) => {
+	res.sendFile(__dirname+"/manifest.json");
+})
+
+app.get('/images/icons/:image', (req,res) => {
+	res.sendFile(__dirname+"/images/icons/"+req.params.image);
+})
 
 io.on('connection', (socket) => { 
 	socket.on("join", (nick,room) => {
