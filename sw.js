@@ -3,6 +3,7 @@
 //Install stage sets up the offline page in the cache and opens a new cache
 self.addEventListener('install', function(event) {
   var offlinePage = new Request('/');
+  
   event.waitUntil(
     fetch(offlinePage).then(function(response) {
       return caches.open('pwabuilder-offline').then(function(cache) {
@@ -15,6 +16,9 @@ self.addEventListener('install', function(event) {
 //If any fetch fails, it will show the offline page.
 //Maybe this should be limited to HTML documents?
 self.addEventListener('fetch', function(event) {
+	if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
+	  return;
+	}
   event.respondWith(
     fetch(event.request).catch(function(error) {
       console.error( '[PWA Builder] Network request Failed. Serving offline page ' + error );
