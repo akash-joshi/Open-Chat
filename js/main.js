@@ -3,8 +3,17 @@ $(() => {
   let prev;
   let ready = false;
   let room;
+  let thisme
   const cleanInput = input => $('<div/>').text(input).html();
   const socket = io();
+
+  const displayNotification = (sender,text) => {
+    if (Notification.permission == 'granted') {
+      navigator.serviceWorker.getRegistration().then(function(reg) {
+        reg.showNotification(`${sender} : ${text}`);
+      });
+    }
+  }
 
   $('#login').show();
   $("#login").submit((event) => {
@@ -15,6 +24,7 @@ $(() => {
     const nick = cleanInput($('#user').val().trim());  
     room = $('#room').val()
     if(nick){
+      thisme = nick;
       socket.emit("join", nick,room);
       ready = true;
       $(".mainwrapper").css('display','flex');
@@ -69,9 +79,10 @@ $(() => {
     if (prev == nick) {
       $('#messages li:last-child > div').append("<div>" + msg + "</div>");
     } else {
-      $('#messages').append("<li> <strong>" + nick + "</strong> : " + "<div id=\"innermsg\">" + msg + "</div></li>");
+      $('#messages').append("<li> <strong>" + nick + "</strong> : " + "<div id=\"innermsg\">" + msg + "</div></li>")
     }
-
+    if(thisme != nick)
+        displayNotification(nick,msg)
     prev = nick;
     $("#messages").animate({
       scrollTop: $('#messages').prop("scrollHeight")

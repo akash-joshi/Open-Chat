@@ -20,6 +20,8 @@
     Enter room : (blank for default)
     <input autocomplete="on" id="room" required />
     <input id="usersubmit" type=submit class="button" value="Submit">
+    <br />
+    Allow notifications to be notified for new messages
   </form>
   <span class="mainwrapper" >
     <ul id="messages"></ul>
@@ -34,13 +36,19 @@
   </span>
  
 	<script>
-		if('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js', {
-			scope: './'
-		  }).then(function(reg) {
-			console.log('Service worker has been registered for scope:'+ reg.scope);
-		  });
-      }
+  if('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js', {
+    scope: './'
+    }).then(function(reg) {
+    console.log('Service worker has been registered for scope:'+ reg.scope);
+    });
+    }
+    
+    if('Notification' in window){
+      Notification.requestPermission(function(status) {
+        console.log('Notification permission status:', status);
+      });
+    }
 	</script>
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
