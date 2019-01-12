@@ -101,7 +101,7 @@ io.on('connection', (socket) => {
 	});
 });
 
-var port = process.env.PORT || 8080;
+const port = process.env.PORT || 8080;
 
 http.listen(port, () => {
 	console.log("working on port "+port);

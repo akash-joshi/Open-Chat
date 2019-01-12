@@ -1,4 +1,3 @@
-'use strict';
 $(() => {
 
   let prev;
@@ -54,9 +53,8 @@ $(() => {
   })
 
   socket.on("people-list", (people) => {
-    let x;
-    for (x in people) {
-        $('#online').append('<li id="' + people[x].id + '">' + people[x].nick);
+    for (person in people) {
+        $('#online').append('<li id="' + people[person].id + '">' + people[person].nick);
     }
   });
 

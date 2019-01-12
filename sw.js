@@ -2,7 +2,7 @@
 
 //Install stage sets up the offline page in the cache and opens a new cache
 self.addEventListener('install', function(event) {
-  var offlinePage = new Request('/');
+  const offlinePage = new Request('/');
   
   event.waitUntil(
     fetch(offlinePage).then(function(response) {
