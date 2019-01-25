@@ -33,6 +33,10 @@ app.get('/css/:fileName', (req, res) => {
 	res.sendFile(__dirname+'/css/'+req.params.fileName);
 });
 
+app.get('/join/:roomNo/:nick', (req, res) => {
+	res.sendFile(__dirname+'/css/'+req.params.fileName);
+});
+
 app.get('/js/:fileName', (req, res) => {
 	res.sendFile(__dirname+'/js/'+req.params.fileName);
 });
@@ -61,8 +65,6 @@ io.on('connection', (socket) => {
 			nick : nick,
 			room : room
 		}
-		console.log("After join : ");
-		console.log(people);
 		if(messageque.hasOwnProperty(room)){
 			for(i=0;i<messageque[room].length;i++){
 				io.to(room).emit('message que', messageque[room][i].nick,messageque[room][i].msg);
@@ -104,5 +106,5 @@ io.on('connection', (socket) => {
 const port = process.env.PORT || 8080;
 
 http.listen(port, () => {
-	console.log("working on port "+port);
+	console.log(`http://localhost:${port}`);
 });
