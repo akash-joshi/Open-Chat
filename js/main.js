@@ -8,7 +8,7 @@ $(() => {
   const socket = io();
 
   const displayNotification = (sender,text) => {
-    if (Notification.permission == 'granted') {
+    if (Notification.permission == 'granted' && document.hidden) {
       navigator.serviceWorker.getRegistration().then(function(reg) {
         reg.showNotification(`${sender} : ${text}`);
       });
@@ -29,6 +29,11 @@ $(() => {
       ready = true;
       $(".mainwrapper").css('display','flex');
       $('#login').hide();
+      if('Notification' in window){
+        Notification.requestPermission(function(status) {
+          console.log('Notification permission status:', status);
+        });
+      }
     }
   });
 
